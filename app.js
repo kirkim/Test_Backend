@@ -2,13 +2,16 @@ import express from 'express';
 import morgan from 'morgan';
 import postRouter from './router/postRouter.js';
 import userRouter from './router/userRouter.js';
+import path from 'path';
 
 const app = express();
 const PORT = 3000;
+const baseURL = path.resolve();
 
 app.use(morgan('dev'));
+app.use(express.urlencoded({ extended: true }));
 
-//app.use(express.static('static'));
+app.use(express.static(baseURL + '/static'));
 app.use('/users', userRouter);
 app.use('/posts', postRouter);
 
