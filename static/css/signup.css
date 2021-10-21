@@ -1,10 +1,10 @@
-.signup-div {
+.signup__div {
   height: 500px;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
-.signup-form {
+.signup__form {
   height: 200px;
   display: flex;
   flex-direction: column;

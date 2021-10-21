@@ -1,27 +1,42 @@
 import express from 'express';
 import morgan from 'morgan';
+import flash from 'express-flash';
+import session from 'express-session';
+import FileStore from 'session-file-store';
 import postRouter from './router/postRouter.js';
 import userRouter from './router/userRouter.js';
-import path from 'path';
+import { config } from './config.js';
+import globalRouter from './router/globalRouter.js';
 
 const app = express();
-const PORT = 3000;
-const baseURL = path.resolve();
+const PORT = config.host.port;
+const baseUrl = config.static.url;
 
 app.use(morgan('dev'));
 app.use(express.urlencoded({ extended: true }));
 
-app.use(express.static(baseURL + '/static'));
+app.use(
+  session({
+    secret: config.cookie.secret,
+    resave: false,
+    saveUninitialized: false,
+    store: new FileStore(session)(),
+  })
+);
+
+app.use(flash());
+app.use(express.static(baseUrl));
 app.use('/users', userRouter);
 app.use('/posts', postRouter);
+app.use('/', globalRouter);
 
 app.use((req, res, next) => {
-  res.sendStatus(404);
+  return res.sendStatus(404);
 });
 
 app.use((error, req, res, next) => {
   console.error(error);
-  res.sendStatus(500);
+  return res.sendStatus(500);
 });
 
 app.listen(PORT, () =>

@@ -8,3 +8,4 @@ let posts = [
     username: 'Chichu',
   },
 ];
+import path from 'path';
