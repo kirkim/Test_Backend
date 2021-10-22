@@ -125,9 +125,10 @@
   5. ### `/users/logout`
 
      <details>
-     <summary><code>GET</code></summary>
+     <summary><code>POST</code></summary>
 
      - response: `200`
+     - redirect: `/users/login`
 
      </details>
      </details>
@@ -272,7 +273,7 @@
 3. <details>
    <summary>express-session</summary>
 
-   - 유저의 접속을 확인하기 위해 "session(세션)"을 이용했습니다.
+   - 유저의 접속을 검증하기 위해 "session(세션)"을 이용했습니다.
    </details>
 
 4. <details>

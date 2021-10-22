@@ -1,4 +1,5 @@
 export const publicOnly = (req, res, next) => {
+  console.log(req.session);
   if (!req.session.loggedIn) {
     return next();
   } else {

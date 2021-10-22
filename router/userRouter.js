@@ -18,6 +18,11 @@ userRouter
   .post(validator.login, userController.postLogin);
 
 userRouter
+  .route('/logout')
+  .all(protectMiddleware.loginOnly)
+  .post(userController.logout);
+
+userRouter
   .route('/:id')
   .get(userController.seeMe)
   .put(userController.updateMe)

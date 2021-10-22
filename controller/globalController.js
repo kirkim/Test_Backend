@@ -1,15 +1,11 @@
 import { PageMaker } from '../render/globalRender.js';
 
-export function home(req, res) {
-  const htmlData = {
+export async function home(req, res) {
+  const data = {
     title: `Home!`,
-    content: `
-		<div class="home__url">
-			<a href="/users/login">Login&rarr;</a><br>
-			<a href="/posts">Post page&rarr;</a>
-		</div>`,
+    contentFile: 'home.html',
   };
-  const pageMaker = new PageMaker(htmlData, req);
-  pageMaker.addCss('/css/home.css');
+  const pageMaker = new PageMaker(data, req);
+  pageMaker.addCss('home.css');
   return res.send(pageMaker.render());
 }

@@ -11,7 +11,7 @@ function required(key, defaultValue = undefined) {
   return value;
 }
 
-export const config = {
+const config = {
   host: {
     port: parseInt(required('HOST_PORT', 8080)),
   },
@@ -25,3 +25,5 @@ export const config = {
     saltRounds: parseInt(required('BCRYPT_SALT_ROUNDS', 10)),
   },
 };
+
+export default config;

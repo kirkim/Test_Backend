@@ -5,7 +5,7 @@ import session from 'express-session';
 import FileStore from 'session-file-store';
 import postRouter from './router/postRouter.js';
 import userRouter from './router/userRouter.js';
-import { config } from './config.js';
+import config from './config.js';
 import globalRouter from './router/globalRouter.js';
 
 const app = express();

@@ -2,21 +2,20 @@ import { PageMaker } from '../render/globalRender.js';
 
 export function getPosts(req, res) {
   const htmlData = {
-    title: `Post list`,
-    content: ``,
+    title: 'Post list',
+    contentFile: 'posts.html',
   };
   const pageMaker = new PageMaker(htmlData, req);
-  pageMaker.addCss('/css/home.css');
+  pageMaker.addCss('post.css');
   return res.send(pageMaker.render());
 }
 export function getCreate(req, res) {
   const htmlData = {
-    title: `Post list`,
-    content: `
-		`,
+    title: 'Create post',
+    contentFile: ``,
   };
   const pageMaker = new PageMaker(htmlData, req);
-  pageMaker.addCss('/css/home.css');
+  pageMaker.addCss('upload.css');
   return res.send(pageMaker.render());
 }
 export function postCreate(req, res) {}
