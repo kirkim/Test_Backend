@@ -141,13 +141,11 @@
 
       ```javascript
       {
-      	id: string, // 유저 id
+      	id: string, // 포스트 id
       	title: string, // 포스트 제목
       	text: string, // 포스트 내용
       	createdAt: Date, // 포스트 생성 날짜
-      	name: string, // 유저 이름
-      	username: string // 유저 로그인id
-      	name: string, // 사용자 이름
+      	userId: number, // 유저 id
       }
       ```
 
@@ -168,7 +166,7 @@
 
       </details>
 
-  3.  ### `/posts/create`
+  3.  ### `/posts/upload`
 
       <details>
       <summary><code>GET</code></summary>
@@ -312,4 +310,13 @@
    - `POST`를 요청하기 전에 **페이지**에서 응답값들이 **유효한지** 체크해줄 수 있습니다.<br>
      하지만 **페이지**의 코드는 누군가에 의해 수정될 수 있고 `유효하지않은값`이 입력된 채로 `POST`요청이 될 수 있습니다. 보안상으로 위험한 일입니다.
    - 그렇기 때문에 `express-validator`모듈을 이용하여 서버에서 `POST`요청값들을 다시한번 **채크**하도록 했습니다.
+   </details>
+
+9. <details>
+   <summary>express-flash</summary>
+
+   - `POST`요청 혹은 `오류가 난 뒤` **다른 페이지**를 `redirect`할 때 **클라이언트**에게 적절한 메시지를 전달해 주기위해 사용했습니다.
+   - 단 한번만 노출되는 **휘발성**메시지여서 **새로고침**을 하여도 같은 메시지를 반복하지 않아서 유용합니다.
+   - **session**저장소를 이용하기 때문에 **session**설정을 선언한 뒤에 `***.use(flash());`로 선언해야 합니다.
+   - 이 프로젝트 같은 경우 `req.session.flash` 안에 **flash메시지**가 쌓이며,<br> `req.flash`로 데이터를 꺼내와 사용하면 `req.session.flash`저장소안에 데이터가 사라집니다.<br> (만약 `req.session.flash`데이터에 직접 접근하여 사용하면 데이터가 사라지지 않음 => 휘발성x)
    </details>

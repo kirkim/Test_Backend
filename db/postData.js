@@ -4,8 +4,6 @@ let posts = [
     title: 'sample post',
     text: 'Hello world!',
     createdAt: Date.now(),
-    name: 'Jisoo',
-    username: 'Chichu',
+    userId: '1',
   },
 ];
-import path from 'path';

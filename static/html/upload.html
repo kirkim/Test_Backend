@@ -1,0 +1,21 @@
+<div class="post__div">
+  <h2>Create post</h2>
+  <form class="post__form" method="POST" action="/posts/upload">
+    <div class="title">
+      <label for="upload__title">title: </label>
+      <input
+        class="title__input"
+        type="text"
+        id="upload__title"
+        name="title"
+        placeholder="Title"
+        required
+      />
+      <input type="submit" value="Upload" />
+    </div>
+    <div class="content">
+      <label for="upload__title">content </label>
+      <input type="text" name="content" id="upload__content" required />
+    </div>
+  </form>
+</div>

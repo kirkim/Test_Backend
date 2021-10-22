@@ -10,10 +10,10 @@ postRouter
   .get(postController.getPosts);
 
 postRouter
-  .route('/create')
+  .route('/upload')
   .all(protectMiddleware.loginOnly)
-  .get(postController.getCreate)
-  .post(postController.postCreate);
+  .get(postController.getUpload)
+  .post(postController.postUpload);
 
 postRouter
   .route('/:id')

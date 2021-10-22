@@ -6,6 +6,7 @@ import { PageMaker } from '../render/globalRender.js';
 export function seeMe(req, res) {}
 export function updateMe(req, res) {}
 export function deleteMe(req, res) {}
+
 export function getSignup(req, res) {
   const htmlData = {
     title: 'Signup',
@@ -19,7 +20,7 @@ export function getSignup(req, res) {
 export async function postSignup(req, res) {
   const { username, name, password, confirmPassword } = req.body;
   if (password !== confirmPassword) {
-    //req.flash('error', `Can't change password`);
+    req.flash('error', `Can't change password`);
     return res.redirect('/users/signup');
   }
   const exist = await userDb.findByUsername(username);
@@ -27,7 +28,6 @@ export async function postSignup(req, res) {
     return res.redirect('/users/signup');
   }
   await userDb.create({ username, name, password });
-  console.log(await userDb.getAlluser());
   return res.redirect('/users/login');
 }
 
@@ -53,7 +53,8 @@ export async function postLogin(req, res) {
   }
   req.session.loggedIn = true;
   req.session.user = user;
-  return res.redirect('/');
+  req.flash('success', `Welcome ${user.name}!`);
+  return res.redirect('/posts');
 }
 
 export const logout = (req, res) => {

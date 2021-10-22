@@ -29,7 +29,44 @@ export class PageMaker {
       throw error;
     }
   };
+
+  printMessage = () => {
+    if (this.req.session.flash) {
+      const flash = this.req.flash();
+      if (flash.error) {
+        return `<div class="message error">${flash.error}</div>`;
+      }
+      if (flash.success) {
+        return `<div class="message success">${flash.success}</div>`;
+      }
+      if (flash.info) {
+        return `<div class="message info">${flash.info}</div>`;
+      }
+    }
+    return '';
+  };
+
+  makeNav = () => {
+    let loginNav = '';
+    let user = '';
+
+    if (this.req.session.loggedIn) {
+      user = `<li>${this.req.session.user.name} 님</li>`;
+      loginNav = this.readFile('/nav/login_nav.html');
+    }
+    const nav = `
+			<nav>
+				<ul>
+						${user}
+						${loginNav}
+				</ul>
+			</nav>
+			`;
+    return nav;
+  };
+
   render = () => {
+    const nav = this.makeNav();
     let data = `
 			<!DOCTYPE html>
 			<html lang="en">
@@ -37,11 +74,15 @@ export class PageMaker {
   		  <meta charset="UTF-8" />
   		  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   		  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+				<link rel="stylesheet" href="/css/_reset.css" />
 				<link rel="stylesheet" href="/css/base.css" />
 				${this.css}
   		  <title>${this.title}</title>
   		</head>
   		<body>
+				<header>
+					${nav}
+				</header>
   		  ${this.content}
   		</body>
 			<footer>
@@ -50,11 +91,9 @@ export class PageMaker {
 			<script src="/js/base.js"></script>
 			${this.javascript}
 			</html>`;
-    if (this.req.session.loggedIn) {
-      const logoutBtn = this.readFile('/tool/logout.html');
-      data = this.req.session.user.name + '님 반갑습니다.  ' + logoutBtn + data;
-    }
-    return data;
+
+    const message = this.printMessage();
+    return message + data;
   };
 
   addCss = (cssUrl) => {

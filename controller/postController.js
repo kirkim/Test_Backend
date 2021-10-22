@@ -6,19 +6,19 @@ export function getPosts(req, res) {
     contentFile: 'posts.html',
   };
   const pageMaker = new PageMaker(htmlData, req);
-  pageMaker.addCss('post.css');
+  pageMaker.addCss('posts.css');
   return res.send(pageMaker.render());
 }
-export function getCreate(req, res) {
+export function getUpload(req, res) {
   const htmlData = {
     title: 'Create post',
-    contentFile: ``,
+    contentFile: 'upload.html',
   };
   const pageMaker = new PageMaker(htmlData, req);
   pageMaker.addCss('upload.css');
   return res.send(pageMaker.render());
 }
-export function postCreate(req, res) {}
+export function postUpload(req, res) {}
 export function get(req, res) {}
 export function update(req, res) {}
 export function remove(req, res) {}
