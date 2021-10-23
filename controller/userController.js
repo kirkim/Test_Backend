@@ -7,14 +7,14 @@ export function seeMe(req, res) {}
 export function updateMe(req, res) {}
 export function deleteMe(req, res) {}
 
-export function getSignup(req, res) {
+export async function getSignup(req, res) {
   const htmlData = {
     title: 'Signup',
     contentFile: 'signup.html',
   };
   const pageMaker = new PageMaker(htmlData, req);
   pageMaker.addCss('signup.css');
-  return res.send(pageMaker.render());
+  return res.send(await pageMaker.render());
 }
 
 export async function postSignup(req, res) {
@@ -33,14 +33,14 @@ export async function postSignup(req, res) {
   return res.redirect('/users/login');
 }
 
-export function getLogin(req, res) {
+export async function getLogin(req, res) {
   const htmlData = {
     title: 'Login',
     contentFile: 'login.html',
   };
   const pageMaker = new PageMaker(htmlData, req);
   pageMaker.addCss('login.css');
-  return res.send(pageMaker.render());
+  return res.send(await pageMaker.render());
 }
 
 export async function postLogin(req, res) {

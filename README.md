@@ -192,7 +192,7 @@
 
       </details>
 
-  4.  ### `/posts/:id`
+  4.  ### `/posts/post/:id`
 
       <details>
       <summary><code>GET</code></summary>
@@ -231,6 +231,15 @@
       <summary><code>DELETE</code></summary>
 
       - response: `204`
+
+      </details>
+
+  5.  ### `/posts/:id`
+
+      <details>
+      <summary><code>GET</code></summary>
+
+      - response: `200`
 
       </details>
 

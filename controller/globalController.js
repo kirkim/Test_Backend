@@ -7,5 +7,5 @@ export async function home(req, res) {
   };
   const pageMaker = new PageMaker(data, req);
   pageMaker.addCss('home.css');
-  return res.send(pageMaker.render());
+  return res.send(await pageMaker.render());
 }

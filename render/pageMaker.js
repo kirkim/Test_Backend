@@ -64,13 +64,13 @@ export default class PageMaker {
     return nav;
   };
 
-  setContent = (contentFile) => {
+  setContent = async (contentFile) => {
     return this.readFile(contentFile);
   };
 
-  render = () => {
+  render = async () => {
     const title = this.data.title;
-    const content = this.setContent(this.data.contentFile);
+    const content = await this.setContent(this.data.contentFile);
     const nav = this.makeNav();
     let data = `
 			<!DOCTYPE html>

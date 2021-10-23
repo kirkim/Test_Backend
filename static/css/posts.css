@@ -1,0 +1,71 @@
+:root {
+  --board-title: 300px;
+  --board-date: 200px;
+  --board-auth: 150px;
+  --board-num: 50px;
+  --board-width: calc(
+    var(--board-num) + var(--board-title) + var(--board-auth) +
+      var(--board-date)
+  );
+}
+
+.board {
+  width: var(--board-width);
+  margin-top: 50px;
+  margin-left: 100px;
+}
+
+.main__set,
+.board__set {
+  margin-bottom: 10px;
+  width: var(--board-width);
+  display: flex;
+}
+
+.main__num,
+.board__num {
+  width: var(--board-num);
+  text-align: center;
+}
+
+.main__title,
+.board__title {
+  width: var(--board-title);
+  padding-left: 10px;
+}
+
+.main__auth,
+.board__auth {
+  text-align: center;
+  width: var(--board-auth);
+}
+
+.main__date,
+.board__date {
+  text-align: center;
+  width: var(--board-date);
+}
+
+.main__set {
+  font-weight: bold;
+  text-align: center;
+  border-bottom: 2px solid black;
+  padding-bottom: 10px;
+  margin-bottom: 15px;
+}
+
+.main__title {
+}
+.main__auth {
+}
+.main__date {
+}
+
+.pagebar {
+  margin-top: 23px;
+  text-align: center;
+}
+
+.pagebar a {
+  margin-left: 5px;
+}

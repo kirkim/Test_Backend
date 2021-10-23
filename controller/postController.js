@@ -1,26 +1,30 @@
 import PageMaker from '../render/pageMaker.js';
 import PostPageMaker from '../render/postPageMaker.js';
 import * as postDb from '../db/postData.js';
+import * as userDb from '../db/userData.js';
+import CustomPageMaker from '../render/customPageMaker.js';
 
 export async function getPosts(req, res) {
+  const { id } = req.params;
   const posts = await postDb.getAllPosts();
   const htmlData = {
     title: 'Post list',
     posts: posts,
+    num: id,
   };
   const postPageMaker = new PostPageMaker(htmlData, req);
   postPageMaker.addCss('posts.css');
-  return res.send(postPageMaker.render());
+  return res.send(await postPageMaker.render());
 }
 
-export function getUpload(req, res) {
+export async function getUpload(req, res) {
   const htmlData = {
     title: 'Create post',
     contentFile: 'upload.html',
   };
   const pageMaker = new PageMaker(htmlData, req);
   pageMaker.addCss('upload.css');
-  return res.send(pageMaker.render());
+  return res.send(await pageMaker.render());
 }
 
 export async function postUpload(req, res) {
@@ -31,7 +35,34 @@ export async function postUpload(req, res) {
   return res.redirect('/posts');
 }
 
-export function get(req, res) {}
+export async function get(req, res) {
+  const { id } = req.params;
+  const post = await postDb.findById(id);
+  const user = await userDb.findById(post.userId);
+  // if (!post) {
+  //   return new Error('Not found post!');
+  // }
+  const content = `
+	<div class="post__set">
+		<div class="post__title">${post.title}</div>
+		<div class="post__info">
+			<div class="post__auth">
+				<a href="/users/${user.id}">${user.name}</a> |
+			</div>
+			<div class="post__date">${post.createdAt.toLocaleString()}</div>
+		</div>
+		<div class="post__content">${post.content}</div>
+	</div>
+	`;
+
+  const htmlData = {
+    title: 'Post',
+    contentFile: content,
+  };
+  const pageMaker = new CustomPageMaker(htmlData, req);
+  pageMaker.addCss('post.css');
+  return res.send(await pageMaker.render());
+}
 
 export function update(req, res) {}
 export function remove(req, res) {}
