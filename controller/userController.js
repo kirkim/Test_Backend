@@ -1,7 +1,7 @@
 import express from 'express';
 import bcrypt from 'bcrypt';
 import * as userDb from '../db/userData.js';
-import { PageMaker } from '../render/globalRender.js';
+import PageMaker from '../render/pageMaker.js';
 
 export function seeMe(req, res) {}
 export function updateMe(req, res) {}
@@ -25,9 +25,11 @@ export async function postSignup(req, res) {
   }
   const exist = await userDb.findByUsername(username);
   if (exist) {
+    req.flash('error', `username is already exists!`);
     return res.redirect('/users/signup');
   }
   await userDb.create({ username, name, password });
+  req.flash('success', `Complete new user creation!`);
   return res.redirect('/users/login');
 }
 
@@ -45,10 +47,12 @@ export async function postLogin(req, res) {
   const { username, password } = req.body;
   const user = await userDb.findByUsername(username);
   if (!user) {
+    req.flash('error', `username or password is wrong!`);
     return res.redirect('/users/login');
   }
   const ok = await bcrypt.compare(password, user.password);
   if (!ok) {
+    req.flash('error', `username or password is wrong!`);
     return res.redirect('/users/login');
   }
   req.session.loggedIn = true;

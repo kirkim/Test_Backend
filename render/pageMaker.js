@@ -1,22 +1,21 @@
 import fs from 'fs';
 import config from '../config.js';
 
-export class PageMaker {
+export default class PageMaker {
   constructor(data, req) {
-    this.title = data.title;
-    this.content = this.readFile(data.contentFile);
+    this.data = data;
     this.css = '';
     this.javascript = '';
     this.footer = '';
-    this.required();
+    //this.required();
     this.req = req;
   }
 
-  required = () => {
-    if (this.title === undefined || this.content === undefined) {
-      throw new Error('title or content have to exist.');
-    }
-  };
+  // required = () => {
+  //   if (this.title === undefined || this.content === undefined) {
+  //     throw new Error('title or content have to exist.');
+  //   }
+  // };
 
   readFile = (contentFile) => {
     try {
@@ -65,7 +64,13 @@ export class PageMaker {
     return nav;
   };
 
+  setContent = (contentFile) => {
+    return this.readFile(contentFile);
+  };
+
   render = () => {
+    const title = this.data.title;
+    const content = this.setContent(this.data.contentFile);
     const nav = this.makeNav();
     let data = `
 			<!DOCTYPE html>
@@ -77,13 +82,13 @@ export class PageMaker {
 				<link rel="stylesheet" href="/css/_reset.css" />
 				<link rel="stylesheet" href="/css/base.css" />
 				${this.css}
-  		  <title>${this.title}</title>
+  		  <title>${title}</title>
   		</head>
   		<body>
 				<header>
 					${nav}
 				</header>
-  		  ${this.content}
+  		  ${content}
   		</body>
 			<footer>
 				${this.footer}

@@ -26,6 +26,6 @@ export async function findByUsername(username) {
   return users.find((user) => user.username === username);
 }
 
-export async function getAlluser() {
+export async function getAllUsers() {
   return users;
 }

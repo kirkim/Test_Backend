@@ -143,7 +143,7 @@
       {
       	id: string, // 포스트 id
       	title: string, // 포스트 제목
-      	text: string, // 포스트 내용
+      	content: string, // 포스트 내용
       	createdAt: Date, // 포스트 생성 날짜
       	userId: number, // 유저 id
       }

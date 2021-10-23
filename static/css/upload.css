@@ -1,22 +1,42 @@
+.post__div {
+  margin-top: 50px;
+  width: 800px;
+}
+
 .post__div h2 {
   text-align: center;
 }
+
 .post__form {
   margin-top: 20px;
+  text-align: center;
+}
+
+.post__form .title {
+  display: flex;
+  align-items: center;
 }
 
 .post__form label {
-  display: inline-block;
-  width: 60px;
+  width: 80px;
+}
+
+.post__form input {
+  margin-top: 10px;
 }
 
 .post__form .title__input {
   width: 80%;
 }
 
-.post__form .content input {}
-	ㅔㅐㄴㄱ
-  margin-top: 20px;
-  height: 300px;
+.post__form .content {
+  display: flex;
+  align-items: center;
+}
+
+.post__form .content textarea {
   width: 80%;
+  margin-top: 20px;
+  text-align: justify;
+  height: 300px;
 }

@@ -1,6 +1,7 @@
 import express from 'express';
 import * as postController from '../controller/postController.js';
 import * as protectMiddleware from '../middleware/protect.js';
+import * as validator from '../middleware/validator.js';
 
 const postRouter = express.Router();
 
@@ -13,7 +14,7 @@ postRouter
   .route('/upload')
   .all(protectMiddleware.loginOnly)
   .get(postController.getUpload)
-  .post(postController.postUpload);
+  .post(validator.post, postController.postUpload);
 
 postRouter
   .route('/:id')

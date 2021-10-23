@@ -23,3 +23,9 @@ export const signup = [
     .withMessage('confirm password should be exist.'),
   validate,
 ];
+
+export const post = [
+  body('title').notEmpty().withMessage('title have to be exist.'),
+  body('content').notEmpty().withMessage('pleas enter content!'),
+  validate,
+];

@@ -1,4 +1,4 @@
-import { PageMaker } from '../render/globalRender.js';
+import PageMaker from '../render/pageMaker.js';
 
 export async function home(req, res) {
   const data = {
