@@ -65,7 +65,11 @@ export default class PageMaker {
   };
 
   setContent = async (contentFile) => {
-    return this.readFile(contentFile);
+    if (contentFile.substr(-5, 5) === '.html') {
+      return this.readFile(contentFile);
+    } else {
+      return contentFile;
+    }
   };
 
   render = async () => {

@@ -6,7 +6,7 @@ let users = [
   {
     username: 'chichu',
     password: '$2b$12$onO6FjcLQx4ZHlpMgwzHg.2yAT9b6Jgde3ul6Jgr2CsUTza1JTqpm',
-    name: 'Jisoo',
+    name: 'Kirim',
     id: '1',
   },
 ];

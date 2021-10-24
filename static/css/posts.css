@@ -69,3 +69,18 @@
 .pagebar a {
   margin-left: 5px;
 }
+
+.boardNav {
+  width: var(--board-width);
+  height: 20px;
+  margin-top: 20px;
+  position: relative;
+}
+
+.uploadBtn {
+  padding: 5px 10px;
+  color: white;
+  background-color: rgb(34, 182, 83);
+  position: absolute;
+  right: 10px;
+}

@@ -2,7 +2,6 @@ import PageMaker from '../render/pageMaker.js';
 import PostPageMaker from '../render/postPageMaker.js';
 import * as postDb from '../db/postData.js';
 import * as userDb from '../db/userData.js';
-import CustomPageMaker from '../render/customPageMaker.js';
 
 export async function getPosts(req, res) {
   const { id } = req.params;
@@ -59,7 +58,7 @@ export async function get(req, res) {
     title: 'Post',
     contentFile: content,
   };
-  const pageMaker = new CustomPageMaker(htmlData, req);
+  const pageMaker = new PageMaker(htmlData, req);
   pageMaker.addCss('post.css');
   return res.send(await pageMaker.render());
 }

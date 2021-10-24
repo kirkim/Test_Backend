@@ -40,6 +40,6 @@ export async function getAllPosts() {
   return posts;
 }
 
-for (let i = 0; i < 120; i++) {
+for (let i = 0; i < 1200; i++) {
   create({ title: 'sample', content: 's', userId: '1' });
 }

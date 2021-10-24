@@ -36,17 +36,22 @@ export default class PostPageMaker extends PageMaker {
     const tool = (this.page.currentNum - 1) % this.pagebarRange;
     let x = this.page.currentNum - tool;
     if (x > this.pagebarRange) {
-      firstPage = `<a href="/posts/1">[1]</a>...`;
+      firstPage = `
+			<a href="/posts/1">[1]</a> ...
+			<a href="/posts/${x - 1}">◀︎ </a>`;
     }
     if (this.page.maxNum >= x + this.pagebarRange) {
       lastPage = `...<a href="/posts/${this.page.maxNum}">[${this.page.maxNum}]</a>`;
     }
 
     for (let i = x; i <= x + this.pagebarRange; i++) {
-      if (i >= x + this.pagebarRange || i > this.page.maxNum) {
+      if (i > this.page.maxNum) {
+        break;
+      } else if (i >= x + this.pagebarRange) {
+        data = data + `<a href="/posts/${i}"> ▶︎</a>`;
         break;
       }
-      console.log(i, this.page.currentNum);
+
       if (i === parseInt(this.page.currentNum)) {
         data =
           data +
@@ -57,6 +62,16 @@ export default class PostPageMaker extends PageMaker {
     }
 
     return firstPage + data + lastPage;
+  };
+
+  makeBoardNav = () => {
+    let data = '';
+    data = `
+		<div class="uploadBtn">
+			<a href="/posts/upload">글쓰기</a>
+		</div>`;
+
+    return data;
   };
 
   //@OverRide
@@ -83,8 +98,9 @@ export default class PostPageMaker extends PageMaker {
       const view = await this.formatList(post, i);
       data = data + view;
     }
+    const boardNav = `<div class="boardNav">${this.makeBoardNav()}</div>`;
     const pagebar = `<div class="pagebar">${this.makePagebar()}</div>`;
 
-    return `<div class="board">${base}${data}${pagebar}</div>`;
+    return `<div class="board">${base}${data}${boardNav}${pagebar}</div>`;
   };
 }
