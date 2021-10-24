@@ -18,7 +18,10 @@ postRouter
   .put(postController.update)
   .delete(postController.remove);
 
-postRouter.all(protectMiddleware.loginOnly).get('/', postController.getPosts);
+postRouter
+  .route('/')
+  .all(protectMiddleware.loginOnly)
+  .get(postController.getPosts);
 
 postRouter
   .route('/:id')

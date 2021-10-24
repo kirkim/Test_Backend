@@ -9,7 +9,9 @@ export async function getPosts(req, res) {
   const htmlData = {
     title: 'Post list',
     posts: posts,
+    type: 'board',
     num: id,
+    pageRange: 10,
   };
   const postPageMaker = new PostPageMaker(htmlData, req);
   postPageMaker.addCss('posts.css');

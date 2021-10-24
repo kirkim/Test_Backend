@@ -33,7 +33,9 @@ export async function findById(id) {
 }
 
 export async function findByUserId(userId) {
-  return posts.find((post) => post.userId === userId);
+  let postArray;
+  postArray = posts.filter((post) => post.userId === userId);
+  return postArray;
 }
 
 export async function getAllPosts() {

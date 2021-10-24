@@ -24,6 +24,7 @@ userRouter
 
 userRouter
   .route('/:id')
+  .all(protectMiddleware.loginOnly)
   .get(userController.seeMe)
   .put(userController.updateMe)
   .delete(userController.deleteMe);

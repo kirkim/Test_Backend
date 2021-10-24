@@ -5,7 +5,8 @@ export default class PostPageMaker extends PageMaker {
   constructor(data, req) {
     super(data, req);
     this.posts = data.posts;
-    this.pageRange = 10;
+    this.pageRange = data.pageRange;
+    this.type = data.type;
     this.pagebarRange = 10;
     this.page = {
       currentNum: data.num ? data.num : 1,
@@ -14,7 +15,7 @@ export default class PostPageMaker extends PageMaker {
   }
 
   formatList = async (post, nb) => {
-    const title = `<div class="board__title"><a href="/posts/post/${post.id}">${post.title}</a></div>`;
+    const title = `<div class="${this.type}__title"><a href="/posts/post/${post.id}">${post.title}</a></div>`;
     let user = await userDb.findById(post.userId);
     if (!user) {
       user = {
@@ -22,10 +23,13 @@ export default class PostPageMaker extends PageMaker {
         id: '', // 삭제된 유저 아이디 루트 넣기
       };
     }
-    const num = `<div class="board__num">${nb}</div>`;
-    const auth = `<div class="board__auth"><a href="/users/${user.id}">${user.name}</a></div>`;
-    const date = `<div class="board__date">${post.createdAt.toLocaleString()}</div>`;
-    const view = `<div class="board__set">${num}${title}${auth}${date}</div>`;
+    const num = `<div class="${this.type}__num">${nb}</div>`;
+    const auth = `<div class="${this.type}__auth"><a href="/users/${user.id}">${user.name}</a></div>`;
+    const date = `
+		<div class="${this.type}__date">
+			${post.createdAt.toLocaleString()}
+		</div>`;
+    const view = `<div class="${this.type}__set">${num}${title}${auth}${date}</div>`;
     return view;
   };
 
@@ -78,11 +82,11 @@ export default class PostPageMaker extends PageMaker {
   setContent = async () => {
     let data = '';
     const base = `
-		<div class="main__set">
-		<div class="main__num">Num</div>
-			<div class="main__title">제목</div>
-			<div class="main__auth">글쓴이</div>
-			<div class="main__date">작성일</div>
+		<div class="${this.type}__main__set">
+		<div class="${this.type}__main__num">Num</div>
+			<div class="${this.type}__main__title">제목</div>
+			<div class="${this.type}__main__auth">글쓴이</div>
+			<div class="${this.type}__main__date">작성일</div>
 		</div>`;
 
     let i = 0;
@@ -98,9 +102,13 @@ export default class PostPageMaker extends PageMaker {
       const view = await this.formatList(post, i);
       data = data + view;
     }
-    const boardNav = `<div class="boardNav">${this.makeBoardNav()}</div>`;
-    const pagebar = `<div class="pagebar">${this.makePagebar()}</div>`;
+    const boardNav = `<div class="${
+      this.type
+    }__nav">${this.makeBoardNav()}</div>`;
+    const pagebar = `<div class="${
+      this.type
+    }__pagebar">${this.makePagebar()}</div>`;
 
-    return `<div class="board">${base}${data}${boardNav}${pagebar}</div>`;
+    return `<div class="${this.type}">${base}${data}${boardNav}${pagebar}</div>`;
   };
 }

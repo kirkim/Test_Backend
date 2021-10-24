@@ -2,8 +2,44 @@ import express from 'express';
 import bcrypt from 'bcrypt';
 import * as userDb from '../db/userData.js';
 import PageMaker from '../render/pageMaker.js';
+import * as postDb from '../db/postData.js';
 
-export function seeMe(req, res) {}
+export async function seeMe(req, res) {
+  const userId = req.params.id;
+  const user = await userDb.findById(userId);
+  const posts = await postDb.findByUserId(user.id);
+  console.log(posts);
+  let postData = '';
+
+  for (let post of posts) {
+    postData =
+      postData +
+      `<li><a href="/posts/post/${post.id}">${
+        post.title
+      }</a> ${post.createdAt.toLocaleString()}</li>`;
+  }
+
+  const data = `
+		<div class="profile">
+			<div class="profile__username">${user.username}</div>
+			<div class="profile__name">${user.name}</div>
+			<div class="profile__postlist">
+				<h2>작성글</h2>
+				<ul>
+					${postData}
+				</ul>
+			</div>
+		</div>`;
+
+  const htmlData = {
+    title: 'Profile',
+    contentFile: data,
+  };
+
+  const pageMaker = new PageMaker(htmlData, req);
+  pageMaker.addCss('profile.css');
+  return res.send(await pageMaker.render());
+}
 export function updateMe(req, res) {}
 export function deleteMe(req, res) {}
 

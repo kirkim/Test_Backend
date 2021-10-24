@@ -15,38 +15,38 @@
   margin-left: 100px;
 }
 
-.main__set,
+.board__main__set,
 .board__set {
   margin-bottom: 10px;
   width: var(--board-width);
   display: flex;
 }
 
-.main__num,
+.board__main__num,
 .board__num {
   width: var(--board-num);
   text-align: center;
 }
 
-.main__title,
+.board__main__title,
 .board__title {
   width: var(--board-title);
   padding-left: 10px;
 }
 
-.main__auth,
+.board__main__auth,
 .board__auth {
   text-align: center;
   width: var(--board-auth);
 }
 
-.main__date,
+.board__main__date,
 .board__date {
   text-align: center;
   width: var(--board-date);
 }
 
-.main__set {
+.board__main__set {
   font-weight: bold;
   text-align: center;
   border-bottom: 2px solid black;
@@ -54,23 +54,23 @@
   margin-bottom: 15px;
 }
 
-.main__title {
+.board__main__title {
 }
-.main__auth {
+.board__main__auth {
 }
-.main__date {
+.board__main__date {
 }
 
-.pagebar {
+.board__pagebar {
   margin-top: 23px;
   text-align: center;
 }
 
-.pagebar a {
+.board__pagebar a {
   margin-left: 5px;
 }
 
-.boardNav {
+.board__nav {
   width: var(--board-width);
   height: 20px;
   margin-top: 20px;
