@@ -3,6 +3,180 @@
 
 ---
 
+# 기능
+
+- <font color='green'>로그인, 로그아웃, 계정생성</font> (완료)
+- <font color='green'>게시판, 게시판페이징, 게시물작성</font> (완료)
+
+---
+
+# 히스토리
+
+- <details>
+  <summary> <font size="4">&lt;2021-10-21&gt;</font> </summary>
+  <font color='orange'>[git-diff 주소]:</font>&nbsp;&nbsp;<a href="https://github.com/kirkim/board/commit/9427a90921a39aa0d01bc94c130e3780461325b2">( 1차 )</a>&nbsp;&nbsp;<a href="https://github.com/kirkim/board/commit/280da97292e26870af716a5a4977d2bbdcf1fa04">( 2차 )</a>
+  <br>
+  <font color='green'>[생성]</font>
+
+  - `express`를 이용하여 서버구축
+  - `express.static()`으로 `'/static'`를 static폴더로 지정.
+
+    - `res.sendFile()`로 html파일을 랜더링
+
+  - 기본적인 뼈대 구축
+    1. router, controller, db, middleware, static 폴더 설계
+    2. global(홈), post(게시판), user(유저) 라우터 설계
+    3. `get`, `post`, `delete`, `put` 컨트롤러 뼈대 구축
+    4. user(유저), post(게시글) 가상DB생성 (`'/db'`폴더에 위치, DB를 사용하는 느낌을 주기위해 함수들을 Promise형태로 반환하도록 만듬)
+  - `express-validator`모듈을 이용해서 **계정생성, 로그인** 입력값 검증 미들웨어 생성 (`'middleware/validator.js'`에 위치)
+  - `dotenv`모듈을 이용해서 `process.env`를 사용
+    1. 보안이필요한 값을 `.env`폴더에 저장해서 사용(gitignore필수)
+    2. `config.js`를 만들어 `.env`에 있는 환경변수를 손쉽게 사용하도록함 (미리보기, 환경변수 default값 지정용)
+  - `bcrypt` 모듈을 이용해서 password(비밀번호)를 해싱하도록함
+  - `protect.js`미들웨어를 만듬
+    - `publicOnly()`: 로그인안할때만 주소에 접근가능, 아닐시 게시판페이지('/posts') redirect.
+    - `loginOnly()`: 로그인중일때만 주소에 접근가능, 아닐시 로그인페이지('/users/login') redirect.
+  - `PageMaker`클래스 생성 (`'/render'`폴더에 위치)
+
+    1. `PageMaker`클래스 매개변수
+
+       - htmlData
+
+         ```javascript
+         htmlData = {
+           title, // 제목
+           content, // html형식 문자열
+         };
+         ```
+
+       - req: 응답값
+
+    2. `content`는 html형식으로 그대로 넘겨줌
+       <details>
+       <summary> htmlData example </summary>
+
+       ```javascript
+       const htmlData = {
+         title: 'Signup',
+         content: `
+       	<div class="signup__div">
+       		<h2>Sign up</h2>
+       		<form class="signup__form" method="POST" action="/users/signup">
+       			<input type="text" name="username" placeholder="Username" required />
+       			<input type="text" name="name" placeholder="Name" required />
+       			<input
+       				type="password"
+       				name="password"
+       				placeholder="Password"
+       				required
+       			/>
+       			<input
+       				type="password"
+       				name="confirmPassword"
+       				placeholder="Confirm password"
+       				required
+       			/>
+       			<input type="submit" value="SignUp" />
+       		</form>
+       	</div>`,
+       };
+       ```
+
+    3. `PageMaker`클래스 내장함수
+       - `required`: 매개변수가 모두 존재하는지 검증하는 함수
+       - `addCss`: css파일 추가
+       - `addJavascript`: js파일 추가
+       - `setFooter`: &lt;footer&gt;태그 내용 지정
+       - `render`: 기본 html 틀에 css, js파일, 제목, 내용, footer를 동기화해서 렌더링해줌
+
+    </details>
+
+  </details>
+
+  - <details>
+    <summary> <font size="4">&lt;2021-10-22&gt;</font> </summary>
+    <font color='orange'>[git-diff 주소]:</font>&nbsp;&nbsp;<a href="https://github.com/kirkim/board/commit/acf302fff6b99ba693cd1ea3ee2731bda90162a8">( 1차 )</a>&nbsp;&nbsp;<a href="https://github.com/kirkim/board/commit/5e738739f773766d0f83d59096f0eb6ce5c7262f">( 2차 )</a>
+    <br>
+    <font color='blue'>[수정]</font>
+
+    - `PageMaker`클래스가 html형식의 데이터를 그대로 받는방식 대신에 `'/static/'`폴더에 있는 html파일을 읽는 방식으로 바꿈 (`fs.readFileSync()`이용)
+
+    <font color='green'>[생성]</font>
+
+    - `express-flash`모듈을 이용해서 메시지를 출력할 수 있도록 함
+    - `PageMaker`클래스에 `printMessage`함수를 만들어 `flash`메시지를 출력해주도록 함
+    - `PageMaker`클래스에 &lt;nav&gt;태그를 커스텀할 수 있는 함수를 구현(`'/nav/login_nav.html'`에 커스텀)
+    - css초기화를 위해 `_reset.css`적용 및 기본적인 css파일 구현
+
+  </details>
+
+  - <details>
+    <summary> <font size="4">&lt;2021-10-23&gt;</font> </summary>
+    <font color='orange'>[git-diff 주소]:</font>&nbsp;&nbsp;<a href="https://github.com/kirkim/board/commit/564c54267206e1c92fe1b7b455c929a9c38ab1e0">( 1차 )</a>&nbsp;&nbsp;<a href="https://github.com/kirkim/board/commit/f231add75da193c4cf958722d5728d382bc491de">( 2차 )</a>
+    <br>
+    <font color='red'>[삭제]</font>
+
+    - `PageMaker`클래스를 상속하는 클래스를 만듬에 따라 변수를 유연하게 받기위해 `required`내장함수를 삭제
+
+    <font color='green'>[생성]</font>
+
+    - post(게시물)작성 입력값에 대한 validator미들웨어 생성
+    - `PageMaker`클래스를 유연하게 만들기 위해서(자식클래스에서) `setContent`내장함수를 만들어 html의 내용을 커스텀할 수 있도록 함.
+    - `PageMaker`클래스를 상속하는 `PostPageMaker`클래스를 생성
+
+      1. 게시판 랜더링 목적으로 만듬
+      2. `PageMaker`클래스의 `setContent`내장함수를 OverRide해서 사용
+      3. `PostPageMaker`클래스 매개변수
+
+         - data
+
+         ```javascript
+         data = {
+           title,
+           posts, // 게시물배열
+           num, // 게시판 paging번호
+         };
+         ```
+
+         - req: 응답값
+
+      4. paging기능(페이지바 생성)
+         - `data.posts`배열의 길이와 `data.num`현재 페이지 번호를 적절히 활용해서 구현
+         - `[1] ◀︎ ... [11][12][13] ... ▶︎ [40]`의 형태로 출력되도록 구현예정
+         - 각각의 `[페이지]`는 `/posts/페이지번호`로 링크를검
+      5. 원하는 갯수(`this.pageRange`)의 개시물을 게시판에 노출
+         - 게시물번호, 제목, 작성자, 생성날짜 순으로 노출
+         - title은 해당게시물을 볼 수 있는 링크(`/posts/post/게시물id`})를 걸어둠
+         - auth(작성자)는 해당 작성자 프로필을 볼 수 있는 링크(`/users/유저id`)를 걸어둠
+
+    - `PageMaker`클래스를 상속하는 `CustomPageMaker`클래스 생성
+      - `PageMaker`클래스는 html내용을 파일로만 받을 수 있는데, 동적인 내용을 받기 위해 만듬
+
+  </details>
+
+  - <details>
+    <summary> <font size="4">&lt;2021-10-24&gt;</font> </summary>
+    <font color='orange'>[git-diff 주소]:</font>&nbsp;&nbsp;<a href="https://github.com/kirkim/board/commit/29f5f185a484504e8093a475cd60895b0052b9b1">( 1차 )</a>&nbsp;&nbsp;<a href="https://github.com/kirkim/board/commit/aa281d0e22437d57fc800f4d675bdf0d12187fab">( 2차 )</a>
+    <br>
+    <font color='red'>[삭제]</font>
+
+    - `CustomPageMaker`클래스 삭제: 단순히 동적인내용을 받기위해 만들기보다 `PageMaker`클래스의 내용을 수정하기로 함
+
+    <font color='blue'>[수정]</font>
+
+    - `PageMaker`클래스가 정적인내용, 동적인내용을 둘다받을 수 있는 클래스로 만듬. (`contentFile.substr(-5, 5) === '.html'`와 같이 입력문자열을 검증하는 방식으로 판단)
+
+    <font color='green'>[생성]</font>
+
+    - `PostPageMaker`클래스에서 페이징바 생성기능 구현완료
+    - 프로필 (`/users/:id`) 페이지 구현
+      - 유저가 작성한 게시물들이 출력되도록 구현예정
+      - `PostPageMaker`클래스에 있는 `페이징바`가 이곳에서도 필요하게 되서 재활용을 위해 클래스를 리메이크할 예정
+
+  </details>
+
+---
+
 # API
 
 - <details>
