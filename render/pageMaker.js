@@ -50,7 +50,7 @@ export default class PageMaker {
     let user = '';
 
     if (this.req.session.loggedIn) {
-      user = `<li>${this.req.session.user.name} 님</li>`;
+      user = `<li><a href="/users/${this.req.session.user.id}">${this.req.session.user.name}</a> 님</li>`;
       loginNav = this.readFile('/nav/login_nav.html');
     }
     const nav = `

@@ -4,14 +4,15 @@ import * as postDb from '../db/postData.js';
 import * as userDb from '../db/userData.js';
 
 export async function getPosts(req, res) {
-  const { id } = req.params;
+  const { range, page } = req.query;
+  //const { id } = req.params;
   const posts = await postDb.getAllPosts();
   const htmlData = {
     title: 'Post list',
     posts: posts,
     type: 'board',
-    num: id,
-    pageRange: 10,
+    num: page ? page : 1,
+    pageRange: range ? range : 10,
   };
   const postPageMaker = new PostPageMaker(htmlData, req);
   postPageMaker.addCss('posts.css');
@@ -40,9 +41,11 @@ export async function get(req, res) {
   const { id } = req.params;
   const post = await postDb.findById(id);
   const user = await userDb.findById(post.userId);
-  // if (!post) {
-  //   return new Error('Not found post!');
-  // }
+
+  let deleteBtn = '';
+  if (user.id === req.session.user.id) {
+    deleteBtn = `<button class="post__delete" id="deleteBtn" data-id="${id}">삭제</button>`;
+  }
   const content = `
 	<div class="post__set">
 		<div class="post__title">${post.title}</div>
@@ -51,6 +54,7 @@ export async function get(req, res) {
 				<a href="/users/${user.id}">${user.name}</a> |
 			</div>
 			<div class="post__date">${post.createdAt.toLocaleString()}</div>
+			${deleteBtn}
 		</div>
 		<div class="post__content">${post.content}</div>
 	</div>
@@ -62,8 +66,24 @@ export async function get(req, res) {
   };
   const pageMaker = new PageMaker(htmlData, req);
   pageMaker.addCss('post.css');
+  pageMaker.addJavascript('post.js');
   return res.send(await pageMaker.render());
 }
 
 export function update(req, res) {}
-export function remove(req, res) {}
+
+export async function remove(req, res) {
+  const { id } = req.params;
+  const { user } = req.session;
+  const post = await postDb.findById(id);
+  if (!post) {
+    return res.sendStatus(404);
+  }
+
+  if (post.userId === user.id) {
+    await postDb.findByIdAndDelete(id);
+    return res.sendStatus(200);
+  }
+
+  return res.sendStatus(403);
+}

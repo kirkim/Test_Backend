@@ -5,7 +5,8 @@
   align-items: center;
 }
 .signup__form {
-  height: 200px;
+  margin-top: 20px;
+  height: 150px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;

@@ -84,3 +84,13 @@
   position: absolute;
   right: 10px;
 }
+
+.post__range {
+  position: absolute;
+}
+
+.post__range select {
+  width: 80px;
+  text-align: center;
+  font-size: 15px;
+}

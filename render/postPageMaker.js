@@ -5,8 +5,8 @@ export default class PostPageMaker extends PageMaker {
   constructor(data, req) {
     super(data, req);
     this.posts = data.posts;
-    this.pageRange = data.pageRange;
-    this.type = data.type;
+    this.pageRange = Number(data.pageRange);
+    this.type = data.type ? data.type : 'board';
     this.pagebarRange = 10;
     this.page = {
       currentNum: data.num ? data.num : 1,
@@ -45,23 +45,26 @@ export default class PostPageMaker extends PageMaker {
 			<a href="/posts/${x - 1}">◀︎ </a>`;
     }
     if (this.page.maxNum >= x + this.pagebarRange) {
-      lastPage = `...<a href="/posts/${this.page.maxNum}">[${this.page.maxNum}]</a>`;
+      lastPage = `...<a href="/posts?page=${this.page.maxNum}&range=${this.pageRange}">[${this.page.maxNum}]</a>`;
     }
 
     for (let i = x; i <= x + this.pagebarRange; i++) {
       if (i > this.page.maxNum) {
         break;
       } else if (i >= x + this.pagebarRange) {
-        data = data + `<a href="/posts/${i}"> ▶︎</a>`;
+        data =
+          data + `<a href="/posts?page=${i}&range=${this.pageRange}"> ▶︎</a>`;
         break;
       }
 
       if (i === parseInt(this.page.currentNum)) {
         data =
           data +
-          `<a href="/posts/${i}"><b style="font-size:20px">[${i}]</b></a>`;
+          `<a href="/posts?page=${i}&range=${this.pageRange}"><b style="font-size:20px">[${i}]</b></a>`;
       } else {
-        data = data + `<a href="/posts/${i}">[${i}]</a>`;
+        data =
+          data +
+          `<a href="/posts?page=${i}&range=${this.pageRange}">[${i}]</a>`;
       }
     }
 
@@ -69,8 +72,29 @@ export default class PostPageMaker extends PageMaker {
   };
 
   makeBoardNav = () => {
+    const MAX = 30;
+    const INTERVAL = 5;
     let data = '';
+    let optionTag = '';
+    let option = '';
+
+    for (let i = 5; i <= MAX; i += INTERVAL) {
+      if (i === this.pageRange) {
+        option = 'selected';
+      } else {
+        option = '';
+      }
+      optionTag = optionTag + `<option ${option} value=${i}>${i} 개</option>`;
+    }
+
     data = `
+		<div class="post__range">
+			<form method="GET")>
+				<select onchange="this.form.submit()" name="range">
+					${optionTag}
+				</select>
+			</form>
+		</div>
 		<div class="uploadBtn">
 			<a href="/posts/upload">글쓰기</a>
 		</div>`;

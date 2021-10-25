@@ -21,6 +21,7 @@
   padding-bottom: 10px;
   border-bottom: 2px solid black;
   display: flex;
+  position: relative;
 }
 
 .post__auth {
@@ -34,4 +35,9 @@
 .post__content {
   margin-top: 10px;
   width: var(--board-width);
+}
+
+.post__delete {
+  position: absolute;
+  right: 10px;
 }
