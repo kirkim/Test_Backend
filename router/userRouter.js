@@ -26,7 +26,12 @@ userRouter
   .route('/:id')
   .all(protectMiddleware.loginOnly)
   .get(userController.seeMe)
-  .put(userController.updateMe)
   .delete(userController.deleteMe);
+
+userRouter
+  .route('/update/:id')
+  .all(protectMiddleware.loginOnly)
+  .get(userController.getUpdateMe)
+  .put(validator.edit, userController.updateMe);
 
 export default userRouter;

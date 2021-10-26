@@ -9,12 +9,18 @@
         id="upload__title"
         name="title"
         placeholder="Title"
-        required
+        required,
+        maxlength="50"
       />
     </div>
     <div class="content">
       <label for="upload__content">content </label>
-      <textarea name="content" id="upload__content" required></textarea>
+      <textarea
+        name="content"
+        id="upload__content"
+        maxlength="1500"
+        required
+      ></textarea>
     </div>
     <input type="submit" value="Upload" />
   </form>

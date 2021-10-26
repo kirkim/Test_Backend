@@ -46,6 +46,16 @@ export async function getAllPosts() {
   return posts;
 }
 
+export async function update(id, data) {
+  const post = posts.find((post) => post.id === id);
+  console.log(post);
+  if (!post) {
+    return false;
+  }
+  post.title = data.title;
+  post.content = data.content;
+  return post;
+}
 // for (let i = 0; i < 1200; i++) {
 //   create({ title: 'sample', content: 's', userId: '1' });
 // }

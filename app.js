@@ -13,6 +13,7 @@ const PORT = config.host.port;
 const baseUrl = config.static.url;
 
 app.use(morgan('dev'));
+app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use(

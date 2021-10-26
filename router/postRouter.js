@@ -12,20 +12,21 @@ postRouter
   .post(validator.post, postController.postUpload);
 
 postRouter
-  .route('/post/:id')
+  .route('/view')
   .all(protectMiddleware.loginOnly)
   .all(protectMiddleware.existPost)
   .get(postController.get)
-  .put(postController.update)
   .delete(postController.remove);
 
 postRouter
-  .route('/')
+  .route('/update')
   .all(protectMiddleware.loginOnly)
-  .get(postController.getPosts);
+  .all(protectMiddleware.existPost)
+  .get(postController.getUpdate)
+  .put(validator.post, postController.putUpdate);
 
 postRouter
-  .route('/:id')
+  .route('/list')
   .all(protectMiddleware.loginOnly)
   .get(postController.getPosts);
 

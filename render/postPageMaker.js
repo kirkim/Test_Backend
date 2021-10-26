@@ -1,10 +1,12 @@
 import PageMaker from './pageMaker.js';
 import * as userDb from '../db/userData.js';
+import * as postDb from '../db/postData.js';
 
 export default class PostPageMaker extends PageMaker {
   constructor(data, req) {
     super(data, req);
     this.posts = data.posts;
+    this.postId = data.no ? data.no : undefined;
     this.pageRange = Number(data.pageRange);
     this.type = data.type ? data.type : 'board';
     this.pagebarRange = 10;
@@ -15,7 +17,7 @@ export default class PostPageMaker extends PageMaker {
   }
 
   formatList = async (post, nb) => {
-    const title = `<div class="${this.type}__title"><a href="/posts/post/${post.id}">${post.title}</a></div>`;
+    const title = `<div class="${this.type}__title"><a href="/posts/view?no=${post.id}&page=${this.page.currentNum}&range=${this.pageRange}">${post.title}</a></div>`;
     let user = await userDb.findById(post.userId);
     if (!user) {
       user = {
@@ -41,11 +43,11 @@ export default class PostPageMaker extends PageMaker {
     let x = this.page.currentNum - tool;
     if (x > this.pagebarRange) {
       firstPage = `
-			<a href="/posts/1">[1]</a> ...
-			<a href="/posts/${x - 1}">◀︎ </a>`;
+			<a href="/posts/list?page=1&range=${this.pageRange}">[1]</a> ...
+			<a href="/posts/list?page=${x - 1}&range=${this.pageRange}">◀︎ </a>`;
     }
     if (this.page.maxNum >= x + this.pagebarRange) {
-      lastPage = `...<a href="/posts?page=${this.page.maxNum}&range=${this.pageRange}">[${this.page.maxNum}]</a>`;
+      lastPage = `...<a href="/posts/list?page=${this.page.maxNum}&range=${this.pageRange}">[${this.page.maxNum}]</a>`;
     }
 
     for (let i = x; i <= x + this.pagebarRange; i++) {
@@ -53,18 +55,19 @@ export default class PostPageMaker extends PageMaker {
         break;
       } else if (i >= x + this.pagebarRange) {
         data =
-          data + `<a href="/posts?page=${i}&range=${this.pageRange}"> ▶︎</a>`;
+          data +
+          `<a href="/posts/list?page=${i}&range=${this.pageRange}"> ▶︎</a>`;
         break;
       }
 
       if (i === parseInt(this.page.currentNum)) {
         data =
           data +
-          `<a href="/posts?page=${i}&range=${this.pageRange}"><b style="font-size:20px">[${i}]</b></a>`;
+          `<a href="/posts/list?page=${i}&range=${this.pageRange}"><b style="font-size:20px">[${i}]</b></a>`;
       } else {
         data =
           data +
-          `<a href="/posts?page=${i}&range=${this.pageRange}">[${i}]</a>`;
+          `<a href="/posts/list?page=${i}&range=${this.pageRange}">[${i}]</a>`;
       }
     }
 
@@ -102,6 +105,33 @@ export default class PostPageMaker extends PageMaker {
     return data;
   };
 
+  makePost = async () => {
+    const post = await postDb.findById(this.postId);
+    const user = await userDb.findById(post.userId);
+
+    /* root관리자에게 위임을 여기서할지 고민..*/
+    let updateBtn = '';
+    let deleteBtn = '';
+    if (user.id === this.req.session.user.id) {
+      updateBtn = `<a class="post__update" href="/posts/update?no=${this.postId}&page=${this.page.maxNum}&range=${this.pageRange}">수정하기</a>`;
+      deleteBtn = `<span class="post__delete" id="deleteBtn">삭제하기</span>`;
+    }
+    const content = `
+  	<div class="post__set">
+  		<div class="post__title">${post.title}</div>
+  		<div class="post__info">
+  			<div class="post__auth">
+  				<a href="/users/${user.id}">${user.name}</a> |
+  			</div>
+  			<div class="post__date">${post.createdAt.toLocaleString()}</div>
+  			${updateBtn}
+  			${deleteBtn}
+  		</div>
+  		<div class="post__content">${post.content}</div>
+  	</div>`;
+
+    return content;
+  };
   //@OverRide
   setContent = async () => {
     let data = '';
@@ -133,6 +163,11 @@ export default class PostPageMaker extends PageMaker {
       this.type
     }__pagebar">${this.makePagebar()}</div>`;
 
-    return `<div class="${this.type}">${base}${data}${boardNav}${pagebar}</div>`;
+    const list = `<div class="${this.type}">${base}${data}${boardNav}${pagebar}</div>`;
+    let view = '';
+    if (this.postId) {
+      view = await this.makePost();
+    }
+    return view + list;
   };
 }

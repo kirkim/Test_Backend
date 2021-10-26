@@ -1,14 +1,10 @@
 const deleteBtn = document.querySelector('#deleteBtn');
 
 const handleDeleteBtn = async (event) => {
-  const sch = location.search;
-  const querys = new URLSearchParams(sch);
-  const noParam = querys.get('no');
-  const pageParam = querys.get('page');
-  const rangeParam = querys.get('range');
+  const id = event.target.dataset.id;
   let response;
   try {
-    response = await fetch(`/posts/view?no=${noParam}`, {
+    response = await fetch(`/users/${id}`, {
       method: 'DELETE',
     });
   } catch (error) {
@@ -17,7 +13,7 @@ const handleDeleteBtn = async (event) => {
 
   if (response.status === 200) {
     window.location.reload();
-    window.location.href = `/posts/list?page=${pageParam}&range=${rangeParam}`;
+    window.location.href = `/users/login`;
   }
 };
 

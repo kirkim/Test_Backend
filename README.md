@@ -1,12 +1,11 @@
-- <a href="#users">Users</a>
-- <a href="#posts">Posts</a>
-
----
-
 # 기능
 
 - <font color='green'>로그인, 로그아웃, 계정생성</font> (완료)
 - <font color='green'>게시판, 게시판페이징, 게시물작성</font> (완료)
+- <font color='green'>게시물삭제, 게시물노출갯수 선택버튼</font> (완료)
+- <font color='gray'>계정편집, 게시물편집</font> (예정)
+- <font color='gray'>계정삭제, 계정위임</font> (예정)
+- <font color='gray'>게시물 검색, 유저 작성글 모아보기</font> (예정)
 
 ---
 
@@ -175,6 +174,44 @@
 
   </details>
 
+  - <details>
+    <summary> <font size="4">&lt;2021-10-26&gt;</font> </summary>
+    <font color='orange'>[git-diff 주소]:</font>&nbsp;&nbsp;<a href="https://github.com/kirkim/board/commit/92bc606ab1c266759a49b1f409bab000b4dd842b">( 1차 )</a>&nbsp;&nbsp;<a href="">( 2차 )</a>
+    <br>
+    <font color='red'>[삭제]</font>
+
+    - ㄴㄴ
+
+    <font color='blue'>[수정]</font>
+
+    - 게시판URL방식을 변경
+      - 기존: `/posts/:id` --> 변경 후: `/posts?page=*&range=*`
+      - (page)페이지번호와 (range)노출할게시판수를 `query`형태로 받아올 수 있게 됐습니다.
+    - 로그아웃 이후에 **뒤로가기**를 하면 **loginOnly미들웨어**(로그인유저만 접근하게하는 미들웨어)가 제대로 동작하지 않았습니다.<br> **loginOnly미들웨어**에 다음의 코드를 추가하여 제대로 동작하도록 만들었습니다.
+
+      ```javascript
+      res.header(
+        'Cache-Control',
+        'private, no-cache, no-store, must-revalidate'
+      );
+      res.header('Expires', '-1');
+      res.header('Pragma', 'no-cache');
+      ```
+
+    <font color='green'>[생성]</font>
+
+    - 게시판 삭제기능 구현
+      - js의 이벤트기능('click')을 이용해서 구현해봤습니다. (클릭시 `fetch`를 이용해 DELETE요청)
+      - 성공할시 `200`, 삭제할포스트를 찾지못할시 `404`, 본인작성하지 않은 글을 삭제요청할시 `403`을 응답하도록 했습니다.
+      - `200`응답을 받을 시 `'/posts'`페이지로 이동하도록 했습니다.
+    - 존재하지않는 포스트주소를 요청시 접근할 수 없게 막는 미들웨어를 추가했습니다. (`existPost미들웨어`)
+    - 표시할 게시판 갯수를 지정할 수 있는 `<select>`태그를 구현
+      - `PostPageMaker`클래스 내부에 생성함수를 구현
+      - 값을 선택과 동시에 적용되도록함
+      - 적용된 게시판노출갯수에 `selected`고정되도록 만들었습니다.
+
+  </details>
+
 ---
 
 # API
@@ -209,7 +246,22 @@
        }
        ```
 
+      </details>
+     <details>
+     <summary><code>DELETE</code></summary>
+
+     - response: `204`
+
      </details>
+
+  3. ### `/users/update/:id`
+
+     <details>
+     <summary><code>GET</code></summary>
+
+     - response: `200`
+
+      </details>
 
      <details>
      <summary><code>PUT</code></summary>
@@ -235,14 +287,7 @@
 
      </details>
 
-     <details>
-     <summary><code>DELETE</code></summary>
-
-     - response: `204`
-
-     </details>
-
-  3. ### `/users/signup`
+  4. ### `/users/signup`
 
      <details>
      <summary><code>GET</code></summary>
@@ -270,7 +315,7 @@
 
      </details>
 
-  4. ### `/users/login`
+  5. ### `/users/login`
 
      <details>
      <summary><code>GET</code></summary>
@@ -296,7 +341,7 @@
 
      </details>
 
-  5. ### `/users/logout`
+  6. ### `/users/logout`
 
      <details>
      <summary><code>POST</code></summary>
@@ -325,7 +370,7 @@
 
       </details>
 
-  2.  ### `/posts`
+  2.  ### `/posts/list`
 
       <details>
       <summary><code>GET</code></summary>
@@ -336,6 +381,9 @@
         {
         	[board1, board2 ....]
         }
+        query:
+        	page: 페이지 번호
+        	range: 페이지 노출 갯수
         ```
 
       </details>
@@ -366,7 +414,23 @@
 
       </details>
 
-  4.  ### `/posts/post/:id`
+  4.  ### `/posts/view`
+
+      <details>
+      <summary><code>GET</code></summary>
+
+      - response: `200`
+
+      </details>
+
+      <details>
+      <summary><code>DELETE</code></summary>
+
+      - response: `204`
+
+      </details>
+
+  5.  ### `/posts/update`
 
       <details>
       <summary><code>GET</code></summary>
@@ -399,21 +463,6 @@
         	post,
         }
         ```
-
-      </details>
-      <details>
-      <summary><code>DELETE</code></summary>
-
-      - response: `204`
-
-      </details>
-
-  5.  ### `/posts/:id`
-
-      <details>
-      <summary><code>GET</code></summary>
-
-      - response: `200`
 
       </details>
 

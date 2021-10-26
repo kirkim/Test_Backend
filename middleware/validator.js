@@ -10,22 +10,48 @@ export const validate = (req, res, next) => {
 };
 
 export const login = [
-  body('username').trim().notEmpty().withMessage('username should be exist.'),
-  body('password').trim().notEmpty().withMessage('password should be exist.'),
+  body('username')
+    .trim()
+    .isLength({ min: 1, max: 16 })
+    .withMessage('username length should be 1 ~ 16.'),
+  body('password')
+    .trim()
+    .isLength({ min: 1, max: 16 })
+    .withMessage('password length should be 1 ~ 16.'),
   validate,
 ];
 
 export const signup = [
   ...login,
-  body('name').notEmpty().withMessage('name is missing'),
+  body('name')
+    .trim()
+    .isLength({ min: 1, max: 16 })
+    .withMessage('name length should be 1 ~ 16.'),
   body('confirmPassword')
-    .notEmpty()
-    .withMessage('confirm password should be exist.'),
+    .trim()
+    .isLength({ min: 1, max: 16 })
+    .withMessage('confirm password length should be 1 ~ 16.'),
+  validate,
+];
+
+export const edit = [
+  body('username')
+    .trim()
+    .isLength({ min: 1, max: 16 })
+    .withMessage('username length should be 1 ~ 16.'),
+  body('password')
+    .trim()
+    .isLength({ max: 16 })
+    .withMessage('password length is too long.'),
   validate,
 ];
 
 export const post = [
-  body('title').notEmpty().withMessage('title have to be exist.'),
-  body('content').notEmpty().withMessage('pleas enter content!'),
+  body('title')
+    .isLength({ min: 1, max: 50 })
+    .withMessage('title length should be 1 ~ 50.'),
+  body('content')
+    .isLength({ min: 1, max: 500 })
+    .withMessage('content length should be 1 ~ 1500.'),
   validate,
 ];

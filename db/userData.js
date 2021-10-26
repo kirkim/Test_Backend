@@ -6,20 +6,37 @@ let users = [
   {
     username: 'chichu',
     password: '$2b$12$onO6FjcLQx4ZHlpMgwzHg.2yAT9b6Jgde3ul6Jgr2CsUTza1JTqpm',
-    name: 'Kirim',
+    name: 'Jisoo',
     id: '1',
+  },
+  {
+    username: 'Bob123',
+    password: '$2b$12$onO6FjcLQx4ZHlpMgwzHg.2yAT9b6Jgde3ul6Jgr2CsUTza1JTqpm',
+    name: 'Bob',
+    id: '2',
   },
 ];
 
-async function hashPassword(user) {
-  user.password = await bcrypt.hash(user.password, config.bcrypt.saltRounds);
+async function hashPassword(password) {
+  return await bcrypt.hash(password, config.bcrypt.saltRounds);
 }
 
 export async function create(user) {
-  await hashPassword(user);
+  user.password = await hashPassword(user.password);
   const created = { ...user, id: Date.now().toString() };
   users.push(created);
   return created.id;
+}
+
+export async function updatePassword(id, password) {
+  const user = users.find((user) => user.id === id);
+  user.password = await hashPassword(password);
+}
+
+export async function updateProfile(id, data) {
+  const user = users.find((user) => user.id === id);
+  user.username = data.username;
+  user.name = data.name;
 }
 
 export async function findByUsername(username) {
@@ -32,4 +49,10 @@ export async function findById(id) {
 
 export async function getAllUsers() {
   return users;
+}
+
+export async function findByIdAndDelete(id) {
+  const user = users.find((user) => user.id === id);
+  /* 유저 위임 */
+  user.name = 'none';
 }
