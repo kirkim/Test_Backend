@@ -1,15 +1,45 @@
-# 기능
+# 실행법 🥊
+
+다음 순서로 깃클론을 한 뒤 서버를 실행시켜줍니다.<br>
+
+```
+git clone git@github.com:kirkim/board.git
+```
+
+```
+npm install
+```
+
+```
+npm start
+```
+
+<br>
+아래와 같이 콘솔이 출력되면 성공적으로 서버가 구동된 것 입니다.<br>
+<br>
+<img src="https://kirkim.github.io/assets/img/sample/1.png">
+<br><br>
+그 후 http://localhost:8080으로 접속<br>
+화면중앙에 login을 클릭하면 다음과 같이 로그인창이 뜹니다.<br>
+
+<img src="https://kirkim.github.io/assets/img/sample/2.png">
+
+위의 버튼을 눌러 아이디를 생성한 뒤 로그인하면 됩니다.
+
+🚫 `.env`폴더는 .gitignore에 넣어서 사용하는 것이 좋습니다.
+
+# 기능 ⚡️
 
 - <font color='green'>로그인, 로그아웃, 계정생성</font> (완료)
 - <font color='green'>게시판, 게시판페이징, 게시물작성</font> (완료)
 - <font color='green'>게시물삭제, 게시물노출갯수 선택버튼</font> (완료)
-- <font color='gray'>계정편집, 게시물편집</font> (예정)
-- <font color='gray'>계정삭제, 계정위임</font> (예정)
+- <font color='green'>계정편집, 게시물편집</font> (완료)
+- <font color='gray'>계정삭제, 계정위임</font> (수정중)
 - <font color='gray'>게시물 검색, 유저 작성글 모아보기</font> (예정)
 
 ---
 
-# 히스토리
+# 히스토리 📚
 
 - <details>
   <summary> <font size="4">&lt;2021-10-21&gt;</font> </summary>
@@ -176,17 +206,17 @@
 
   - <details>
     <summary> <font size="4">&lt;2021-10-26&gt;</font> </summary>
-    <font color='orange'>[git-diff 주소]:</font>&nbsp;&nbsp;<a href="https://github.com/kirkim/board/commit/92bc606ab1c266759a49b1f409bab000b4dd842b">( 1차 )</a>&nbsp;&nbsp;<a href="">( 2차 )</a>
+    <font color='orange'>[git-diff 주소]:</font>&nbsp;&nbsp;<a href="https://github.com/kirkim/board/commit/92bc606ab1c266759a49b1f409bab000b4dd842b">( 1차 )</a>&nbsp;&nbsp;<a href="https://github.com/kirkim/board/commit/68099cd43afc3783a245ae25e2befd8387e64c59">( 2차 )</a>
     <br>
-    <font color='red'>[삭제]</font>
-
-    - ㄴㄴ
 
     <font color='blue'>[수정]</font>
 
     - 게시판URL방식을 변경
-      - 기존: `/posts/:id` --> 변경 후: `/posts?page=*&range=*`
+      - 기존: `/posts/:id` --> 변경 후: `/posts/list?page=*&range=*`
       - (page)페이지번호와 (range)노출할게시판수를 `query`형태로 받아올 수 있게 됐습니다.
+    - 게시글URL방식을 변경
+      - 기존: `/posts/post/:id` --> 변경 후: `/posts/view?no=*&page=*&range=*`
+      - (no)포스트Id, (page)페이지번호와 (range)노출할게시판수를 `query`형태로 받아올 수 있게 됐습니다.
     - 로그아웃 이후에 **뒤로가기**를 하면 **loginOnly미들웨어**(로그인유저만 접근하게하는 미들웨어)가 제대로 동작하지 않았습니다.<br> **loginOnly미들웨어**에 다음의 코드를 추가하여 제대로 동작하도록 만들었습니다.
 
       ```javascript
@@ -197,6 +227,8 @@
       res.header('Expires', '-1');
       res.header('Pragma', 'no-cache');
       ```
+
+    - 유저, 포스트의 편집과 생성의 `validation`모듈을 백엔드 유효성검사를 좀 더 정밀하게 만듬
 
     <font color='green'>[생성]</font>
 
@@ -209,12 +241,18 @@
       - `PostPageMaker`클래스 내부에 생성함수를 구현
       - 값을 선택과 동시에 적용되도록함
       - 적용된 게시판노출갯수에 `selected`고정되도록 만들었습니다.
+    - 게시물을 누르면 게시판목록 위에 노출되도록 만들었습니다.
+      - `query`로 개시물 노출갯수(range), 페이징(page), 포스트아이디(no)를 넘겨주어 현재 게시판 목록을 유지하고 해당게시글만 위에 생기도록 만듬
+    - `PageMaker`클래스를 이용해서 게시물 수정페이지를 구현
+    - `PUT`,`DELETE` 요청은 `<form>`태그로 요청이 안되서 프론트단 js에서 `fetch`기능을 이용하여 처리하도록 만듬
+    - `PageMaker`클래스를 이용해서 프로필 편집 페이지를 구현
+    - 프로필의 `PUT`,`DELETE`요청 또한 프론트단에서 `fetch`를 이용해서 요청을 주도록 했으면 입력값에 대한 유효성 검사를 프론트, 백엔드 두곳에서 하도록 만듬
 
   </details>
 
 ---
 
-# API
+# API 📪
 
 - <details>
   <summary id="users"> <font size="4">&#91;Users&#93;</font> </summary>
@@ -240,17 +278,11 @@
 
      - response: `200`
 
-       ```javascript
-       {
-       	user,
-       }
-       ```
-
       </details>
      <details>
      <summary><code>DELETE</code></summary>
 
-     - response: `204`
+     - response: (성공)`200`, (실패)`400`,`403`
 
      </details>
 
@@ -277,13 +309,7 @@
        }
        ```
 
-     - response: `200`
-
-       ```javascript
-       {
-       	user,
-       }
-       ```
+     - response: (성공)`200`, (실패)`400`,`403`
 
      </details>
 
@@ -311,7 +337,7 @@
        ```
 
      - response: `201`
-       redirect: `/login`
+       redirect: `/users/login`
 
      </details>
 
@@ -337,7 +363,7 @@
        ```
 
      - response: `200`
-     - redirect: `/posts`
+     - redirect: `/posts/list`
 
      </details>
 
@@ -410,7 +436,7 @@
         ```
 
       - response: `200`
-        redirect: `/posts`
+        redirect: `/posts/list`
 
       </details>
 
@@ -426,7 +452,7 @@
       <details>
       <summary><code>DELETE</code></summary>
 
-      - response: `204`
+      - response: (성공)`200`, (실패)`400`,`403`
 
       </details>
 
@@ -446,23 +472,12 @@
 
         ```javascript
         {
-        	id,
         	title,
-        	text,
-        	createdAt,
-        	name,
-        	username,
-        	name,
+        	content,
         }
         ```
 
-      - response: `200`
-
-        ```javascript
-        {
-        	post,
-        }
-        ```
+      - response: (성공)`200`, (실패)`400`,`403`
 
       </details>
 
@@ -470,12 +485,13 @@
 
 ---
 
-# 페이지 렌더링
+# 페이지 렌더링 👀
 
 - <details>
   <summary>서버사이드 렌더링 이용</summary>
 
   - 클라이언트 사이드 렌더링을 할줄 모릅니다.(배울예정..react, vue.js)
+  - `PUT`, `DELETE`요청은 `<form>`태그로 요청이 안되서 프론트단 js파일에서 이벤트리스너 + `fetch`로 요청을 처리했습니다.
   </details>
 
 - <details>
@@ -486,7 +502,7 @@
 
 ---
 
-# 사용한 NPM 패키지
+# 사용한 NPM 패키지 📦
 
 1. <details>
    <summary>express</summary>

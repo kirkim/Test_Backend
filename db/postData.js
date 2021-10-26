@@ -56,6 +56,7 @@ export async function update(id, data) {
   post.content = data.content;
   return post;
 }
-// for (let i = 0; i < 1200; i++) {
-//   create({ title: 'sample', content: 's', userId: '1' });
-// }
+
+for (let i = 0; i < 1200; i++) {
+  create({ title: 'sample', content: 's', userId: '1' });
+}

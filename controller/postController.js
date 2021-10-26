@@ -34,7 +34,7 @@ export async function postUpload(req, res) {
   const userId = req.session.user;
   await postDb.create({ title, content, userId });
   req.flash('success', `Add new post!`);
-  return res.redirect('/posts');
+  return res.status(200).redirect('/posts/list');
 }
 
 export async function get(req, res) {

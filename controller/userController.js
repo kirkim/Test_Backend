@@ -149,7 +149,7 @@ export async function postSignup(req, res) {
   }
   await userDb.create({ username, name, password });
   req.flash('success', `Complete new user creation!`);
-  return res.redirect('/users/login');
+  return res.status(201).redirect('/users/login');
 }
 
 export async function getLogin(req, res) {
@@ -177,7 +177,7 @@ export async function postLogin(req, res) {
   req.session.loggedIn = true;
   req.session.user = user;
   req.flash('success', `Welcome ${user.name}!`);
-  return res.redirect('/posts/list');
+  return res.status(200).redirect('/posts/list');
 }
 
 export const logout = (req, res) => {
