@@ -43,7 +43,7 @@ export async function findByIdAndDelete(id) {
 }
 
 export async function getAllPosts() {
-  return posts;
+  return posts.sort((a, b) => b.createdAt - a.createdAt);
 }
 
 export async function update(id, data) {
@@ -58,5 +58,12 @@ export async function update(id, data) {
 }
 
 for (let i = 0; i < 1200; i++) {
-  create({ title: 'sample', content: 's', userId: '1' });
+  const created = {
+    id: String(i + 4),
+    title: 'sample',
+    content: 'ssss',
+    userId: '1',
+    createdAt: new Date('2019-05-25'),
+  };
+  posts.push(created);
 }
