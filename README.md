@@ -26,16 +26,39 @@ npm start
 
 위의 버튼을 눌러 아이디를 생성한 뒤 로그인하면 됩니다.
 
-🚫 `.env`폴더는 .gitignore에 넣어서 사용하는 것이 좋습니다.
+🚫 `.env`파일은 .gitignore에 넣어서 사용하는 것이 좋습니다.
 
-# 기능 ⚡️
+---
+
+# 업데이트 ⚡️
+
+## (2021.10.21 ~)
 
 - <font color='green'>로그인, 로그아웃, 계정생성</font> (완료)
 - <font color='green'>게시판, 게시판페이징, 게시물작성</font> (완료)
 - <font color='green'>게시물삭제, 게시물노출갯수 선택버튼</font> (완료)
 - <font color='green'>계정편집, 게시물편집</font> (완료)
-- <font color='gray'>계정삭제, 계정위임</font> (수정중)
-- <font color='gray'>게시물 검색, 유저 작성글 모아보기</font> (예정)
+
+- ~~<font color='gray'>계정삭제, 계정위임</font> (수정중)~~
+- ~~<font color='gray'>게시물 검색, 유저 작성글 모아보기</font> (예정)~~
+
+## (2021.10.27 ~) 프로젝트 종료
+
+#### (문제점)
+
+- 게시판을 제 멋대로 돌아가게 만들었는데 문제점이 많은 것같습니다.
+- html코드를 nodejs에서 만들어서 만들어서 보내주다보니 가독성이 떨어지며 수정이 힘듬
+- 결정적으로 REST API에 대해 잘못 이해하고 있었습니다.
+
+#### (앞으로 계획)
+
+- 이 프로젝트는 여기서 멈추고 다음개념을 더 공부한 뒤 새로운 프로젝트를 만들계획입니다.
+- 프론트엔드와 백엔드의 분업화, 서버비용적문제, js의 발전에 따라 CSR(클라이언트사이드렌더링) 방식을 배우는 것은 필수인 것 같습니다.
+- CSR(클라이언트사이드렌더링) vs SSR(서버사이드렌더링)
+- MPA(Multi Page Application) vs SPA(Single Page Application)
+- Ajax, JSON응답
+- 쿠키, 세션, jwt 중 하나 잘 다루기
+- DB(데이터베이스) 잘 다루기
 
 ---
 
@@ -252,7 +275,7 @@ npm start
 
 ---
 
-# API 📪
+# API 📪 (보완필요)
 
 - <details>
   <summary id="users"> <font size="4">&#91;Users&#93;</font> </summary>
@@ -485,7 +508,7 @@ npm start
 
 ---
 
-# 페이지 렌더링 👀
+# 페이지 렌더링
 
 - <details>
   <summary>서버사이드 렌더링 이용</summary>
