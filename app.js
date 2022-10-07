@@ -1,12 +1,7 @@
 import express from 'express';
 import morgan from 'morgan';
-import flash from 'express-flash';
-import session from 'express-session';
-import FileStore from 'session-file-store';
-import postRouter from './router/postRouter.js';
-import userRouter from './router/userRouter.js';
 import config from './config.js';
-import globalRouter from './router/globalRouter.js';
+import anifaceRouter from './router/anifaceRouter.js';
 
 const app = express();
 const PORT = config.host.port;
@@ -16,20 +11,8 @@ app.use(morgan('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use(
-  session({
-    secret: config.cookie.secret,
-    resave: false,
-    saveUninitialized: false,
-    store: new FileStore(session)(),
-  })
-);
-
-app.use(flash());
 app.use(express.static(baseUrl));
-app.use('/users', userRouter);
-app.use('/posts', postRouter);
-app.use('/', globalRouter);
+app.use('/', anifaceRouter);
 
 app.use((req, res, next) => {
   return res.sendStatus(404);
